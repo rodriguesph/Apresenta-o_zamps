@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insights Semipresencial - Rio de Janeiro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .page {
+            display: none;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: #4a5568;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-left: 4px solid #667eea;
+            padding-left: 15px;
+        }
+
+        h3 {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .index-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .index-card {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .index-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .index-card h3 {
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .index-card p {
+            color: #718096;
+            font-size: 0.9em;
+        }
+
+        .insight-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .insight-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .insight-list li {
+            background: white;
+            margin-bottom: 8px;
+            padding: 12px 15px;
+            border-radius: 5px;
+            border-left: 3px solid #a0aec0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .insight-list li strong {
+            color: #2d3748;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .comparison-table tr:hover {
+            background: #e6fffa;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #a0aec0 0%, #718096 100%);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 8px 15px rgba(160, 174, 192, 0.4);
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%);
+            border: 2px solid #4fd1c7;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .highlight-box h4 {
+            color: #234e52;
+            margin-bottom: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-top: 4px solid #667eea;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #718096;
+            font-size: 0.9em;
+        }
+
+        .fireworks {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .firework {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            animation: firework 2s ease-out infinite;
+        }
+
+        @keyframes firework {
+            0% {
+                opacity: 1;
+                transform: scale(0);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1.5);
+            }
+        }
+
+        .thanks-content {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .thanks-content h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+
+        .contact-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 30px 0;
+            border: 2px solid #e2e8f0;
+        }
+
+        .contact-info h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .email-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .email-link:hover {
+            text-decoration: underline;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            z-index: 1000;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .page {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .comparison-table {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="container">
+        <!-- Página Índice -->
+        <div class="page active" id="index">
+            <h1>🎯 Insights Semipresencial - Rio de Janeiro</h1>
+            <p style="text-align: center; font-size: 1.2em; color: #718096; margin-bottom: 30px;">
+                Relatório das visitas realizadas nos dias 20 e 21 de agosto de 2025
+            </p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Instituições Visitadas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">2</div>
+                    <div class="stat-label">Dias de Reuniões</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">Profissionais Entrevistados</div>
+                </div>
+            </div>
+
+            <div class="index-grid">
+                <div class="index-card" onclick="showPage('unig')">
+                    <h3>🏫 UNIG - Larissa</h3>
+                    <p>Pró-reitora acadêmica com experiência em UVA e Estácio. Insights sobre posicionamento estratégico e estrutura operacional.</p>
+                </div>
+                
+                <div class="index-card" onclick="showPage('uva')">
+                    <h3>🎓 UVA - Lidiane & Tauana</h3>
+                    <p>Coordenadoras atuais do semipresencial. Operação em execução, LAB Ideias e cultura MAKER.</p>
+                </div>
+                
+                <div class="index-card" onclick="showPage('afya')">
+                    <h3>⚕️ Afya - Dani</h3>
+                    <p>Coordenadora de operações com estrutura enxuta e uso de IA para correção de provas.</p>
+                </div>
+                
+                <div class="index-card" onclick="showPage('comparison')">
+                    <h3>📊 Análise Comparativa</h3>
+                    <p>Comparação detalhada entre os três modelos e principais diferenças operacionais.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Página UNIG -->
+        <div class="page" id="unig">
+            <h1>🏫 UNIG - Insights Larissa</h1>
+            <p style="text-align: center; color: #718096; margin-bottom: 30px;">
+                <strong>Larissa</strong> - Pró-reitora acadêmica UNIG | Ex-UVA | Ex-Estácio
+            </p>
+
+            <div class="insight-section">
+                <h2>🎯 Posicionamento Estratégico</h2>
+                <ul class="insight-list">
+                    <li><strong>Definição clara:</strong> Semi de massa vs. Semi premium</li>
+                    <li><strong>Evitar canibalização:</strong> Entre modalidades presencial e semi</li>
+                    <li><strong>Análise de demanda:</strong> Para ambas as modalidades</li>
+                </ul>
+            </div>
+
+            <div class="insight-section">
+                <h2>🏗️ Estrutura Operacional - Modelo UVA</h2>
+                <h3>📅 Organização Acadêmica</h3>
+                <ul class="insight-list">
+                    <li><strong>Modelo trimestral:</strong> 3 disciplinas simultâneas</li>
+                    <li><strong>2 teóricas:</strong> Híbridas (50% online + 50% presencial)</li>
+                    <li><strong>1 teórica/prática:</strong> 100% presencial</li>
+                </ul>
+
+                <h3>👥 Equipe por Disciplina (4 atores)</h3>
+                <ul class="insight-list">
+                    <li><strong>Professor Conteudista:</strong> Produz conteúdo online + coordena atividades</li>
+                    <li><strong>Tutor Online:</strong> Tira dúvidas + encontros síncronos gravados</li>
+                    <li><strong>Tutor Presencial:</strong> Executa práticas (não precisa contrato pedagógico)</li>
+                    <li><strong>Professor:</strong> Aulas síncronas semanais (50min)</li>
+                </ul>
+            </div>
+
+            <div class="insight-section">
+                <h2>📚 Conteúdo e Validação</h2>
+                <ul class="insight-list">
+                    <li><strong>Material 100% próprio</strong></li>
+                    <li><strong>Fluxo:</strong> Conteudista → Designer Instrucional → Coordenador valida</li>
+                    <li><strong>Regra:</strong> Nenhum material sem validação do coordenador</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box">
+                <h4>🎯 Diferencial UVA</h4>
+                <p><strong>Medicina Veterinária Semi:</strong> Grande sucesso na implementação</p>
+                <p><strong>Campus e experiência</strong> como principais atrativos</p>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="showPage('index')">← Voltar ao Índice</button>
+                <button class="btn" onclick="showPage('uva')">Próximo: UVA →</button>
+            </div>
+        </div>
+
+        <!-- Página UVA -->
+        <div class="page" id="uva">
+            <h1>🎓 UVA - Operação Atual</h1>
+            <p style="text-align: center; color: #718096; margin-bottom: 30px;">
+                <strong>Lidiane</strong> - Coord. Geral Semi | <strong>Tauana</strong> - Coord. Engenharias
+            </p>
+
+            <div class="insight-section">
+                <h2>🏫 Estrutura Física</h2>
+                <ul class="insight-list">
+                    <li><strong>LAB Ideias:</strong> Sala metodologia ativa com 8 mesas para 6 pessoas</li>
+                    <li><strong>2 quadros interativos</strong></li>
+                    <li><strong>Grupo UVA:</strong> Várias instituições RJ + Bahia (incluindo UNIJORGE)</li>
+                </ul>
+            </div>
+
+            <div class="insight-section">
+                <h2>📅 Organização Acadêmica</h2>
+                <ul class="insight-list">
+                    <li><strong>Modelo trimestral</strong> (confirmando Larissa)</li>
+                    <li><strong>Matrizes com sinergia:</strong> Máximo aproveitamento entre cursos da mesma área</li>
+                    <li><strong>NUNCA entre modalidades</strong> (presencial ≠ semi)</li>
+                    <li><strong>Sistema carrossel:</strong> Entrada em qualquer etapa do 1º ano</li>
+                    <li><strong>Pré-requisitos:</strong> Alocados no 5º módulo</li>
+                </ul>
+            </div>
+
+            <div class="insight-section">
+                <h2>🎯 Presencialidade e Cultura MAKER</h2>
+                <ul class="insight-list">
+                    <li><strong>Aulas práticas:</strong> 3h relógio</li>
+                    <li><strong>Enfoque:</strong> Cultura MAKER</li>
+                    <li><strong>Tutor pedagógico:</strong> Sempre aplicação prática</li>
+                    <li><strong>Presencial = só prática</strong> (teoria não)</li>
+                    <li><strong>Feira Maker:</strong> Apresentação de projetos semestralmente</li>
+                </ul>
+            </div>
+
+            <div class="insight-section">
+                <h2>📚 Conteúdo 100% Próprio</h2>
+                <h3>Estrutura por Disciplina:</h3>
+                <ul class="insight-list">
+                    <li><strong>4 unidades de aprendizagem</strong></li>
+                    <li><strong>Por unidade:</strong> 1 vídeo + questões (objetivas/discursivas)</li>
+                    <li><strong>8 roteiros:</strong> Aulas práticas/encontros presenciais</li>
+                    <li><strong>Nenhuma plataforma externa</strong></li>
+                </ul>
+            </div>
+
+            <div class="highlight-box">
+                <h4>🎯 Princípio de Escalabilidade</h4>
+                <p><strong>Regra de ouro:</strong> Metodologia, extensão, AC e material didático devem ser <strong>escaláveis nacionalmente</strong></p>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="showPage('index')">← Voltar ao Índice</button>
+                <button class="btn" onclick="showPage('afya')">Próximo: Afya →</button>
+            </div>
+        </div>
+
+        <!-- Página Afya -->
+        <div class="page" id="afya">
+            <h1>⚕️ Afya - Estrutura Enxuta</h1>
+            <p style="text-align: center; color: #718096; margin-bottom: 30px;">
+                <strong>Dani</strong> - Coordenadora de Operações Semipresencial
+            </p>
+
+            <div class="insight-section">
+                <h2>📅 Estrutura Acadêmica</h2>
+                <ul class="insight-list">
+                    <li><strong>Presencialidade:</strong> 1x por semana durante a semana</li>
+                    <li><strong>Material:</strong> 100% próprio produzido pela Afya</li>
+                    <li><strong>Aulas síncronas:</strong> Professor tutor pedagógico</li>
+                </ul>
+            </div>
+
+            <div class="insight-section">
+                <h2>🤖 Avaliações Inovadoras</h2>
+                <ul class="insight-list">
+                    <li><strong>Provas presenciais discursivas</strong></li>
+                    <li><strong>Correção por IA:</strong> Plataforma Go Mine</li>
+                    <li><strong>Contato:</strong> Bruno Pachusk (para mais informações)</li>
+                </ul>
+            </div>
+
+            <div class="insight-section">
+                <h2>⚙️ Estrutura Operacional Enxuta</h2>
+                <ul class="insight-list">
+                    <li><strong>Coordenação unificada:</strong> Mesmo coordenador para Semi + EAD</li>
+                    <li><strong>Equipe dedicada:</strong> 4 colaboradores administrativos exclusivos</li>
+                </ul>
+                
+                <h3>Divisão de Responsabilidades:</h3>
+                <ul class="insight-list">
+                    <li><strong>Produção/Administração:</strong> Gera dados → Envia para coordenador</li>
+                    <li><strong>Coordenador:</strong> Só análise + execução de ações (não operacional)</li>
+                </ul>
+            </div>
+
+            <div class="insight-section">
+                <h2>🔧 Projetos de Extensão</h2>
+                <ul class="insight-list">
+                    <li><strong>Evolução progressiva:</strong> Projeto cresce ao longo do curso</li>
+                    <li><strong>Início:</strong> 2º período</li>
+                    <li><strong>Estrutura:</strong> 1 disciplina específica para extensão</li>
+                    <li><strong>Personalização:</strong> Trilhas diferentes por área</li>
+                    <li><strong>Organização:</strong> Matriz de extensão por curso</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box">
+                <h4>💡 Diferencial Afya</h4>
+                <p><strong>Estrutura enxuta</strong> com apenas 4 colaboradores administrativos</p>
+                <p><strong>Uso de IA</strong> para correção de provas discursivas</p>
+                <p><strong>Coordenação unificada</strong> Semi + EAD</p>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="showPage('index')">← Voltar ao Índice</button>
+                <button class="btn" onclick="showPage('comparison')">Próximo: Comparação →</button>
+            </div>
+        </div>
+
+        <!-- Página Comparação -->
+        <div class="page" id="comparison">
+            <h1>📊 Análise Comparativa</h1>
+            <p style="text-align: center; color: #718096; margin-bottom: 30px;">
+                Comparação detalhada entre os três modelos visitados
+            </p>
+
+            <div class="insight-section">
+                <h2>🎯 Comparativo Operacional</h2>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Aspecto</th>
+                            <th>UNIG/UVA (Larissa)</th>
+                            <th>UVA Atual (Lidiane/Tauana)</th>
+                            <th>Afya (Dani)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Presencialidade</strong></td>
+                            <td>1x/sem (saúde)<br>1x/15dias (eng)</td>
+                            <td>3h relógio por prática</td>
+                            <td>1x/semana</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Material</strong></td>
+                            <td>100% próprio</td>
+                            <td>100% próprio</td>
+                            <td>100% próprio</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Coordenação</strong></td>
+                            <td>Separada por modalidade</td>
+                            <td>Separada por modalidade</td>
+                            <td>Unificada (Semi+EAD)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Equipe</strong></td>
+                            <td>4 atores por disciplina</td>
+                            <td>Tutor pedagógico + suporte</td>
+                            <td>4 administrativos dedicados</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Avaliação</strong></td>
+                            <td>Presencial obrigatória</td>
+                            <td>Nota + presença síncrona</td>
+                            <td>Presencial com IA</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Extensão</strong></td>
+                            <td>Disciplinas semestrais</td>
+                            <td>Disciplinas semestrais</td>
+                            <td>Trilhas por área</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inovação</strong></td>
+                            <td>Medicina Veterinária</td>
+                            <td>Cultura MAKER + LAB Ideias</td>
+                            <td>IA para correção</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="insight-section">
+                <h2>🎯 Principais Diferenças Estratégicas</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h4 style="color: #667eea; margin-bottom: 10px;">UNIG/UVA (Larissa)</h4>
+                        <p><strong>Foco:</strong> Estrutura robusta com 4 atores por disciplina</p>
+                        <p><strong>Diferencial:</strong> Validação obrigatória do coordenador</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <h4 style="color: #667eea; margin-bottom: 10px;">UVA Atual</h4>
+                        <p><strong>Foco:</strong> Cultura MAKER e escalabilidade nacional</p>
+                        <p><strong>Diferencial:</strong> LAB Ideias e feira de projetos</p>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <h4 style="color: #667eea; margin-bottom: 10px;">Afya</h4>
+                        <p><strong>Foco:</strong> Eficiência operacional e tecnologia</p>
+                        <p><strong>Diferencial:</strong> IA para correção e estrutura enxuta</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="insight-section">
+                <h2>💡 Insights para Implementação THINK</h2>
+                <ul class="insight-list">
+                    <li><strong>Posicionamento:</strong> Definir claramente se será semi de massa ou premium</li>
+                    <li><strong>Coordenação:</strong> Avaliar se separar ou unificar coordenação Semi/EAD</li>
+                    <li><strong>Material:</strong> Todas usam 100% próprio - investimento necessário</li>
+                    <li><strong>Presencialidade:</strong> Definir frequência ideal por área (saúde vs. outras)</li>
+                    <li><strong>Avaliação:</strong> Considerar uso de IA como diferencial competitivo</li>
+                    <li><strong>Escalabilidade:</strong> Pensar nacionalmente desde o início</li>
+                    <li><strong>Cultura:</strong> Implementar metodologias ativas (MAKER)</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box">
+                <h4>🎯 Recomendações Estratégicas</h4>
+                <p><strong>1. Híbrido dos modelos:</strong> Combinar estrutura robusta da UVA com eficiência da Afya</p>
+                <p><strong>2. Investir em IA:</strong> Diferencial competitivo para correções e análises</p>
+                <p><strong>3. Cultura MAKER:</strong> Implementar desde o início para engajamento</p>
+                <p><strong>4. Material próprio:</strong> Investimento fundamental para qualidade</p>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="showPage('index')">← Voltar ao Índice</button>
+                <button class="btn" onclick="showPage('thanks')">Finalizar →</button>
+            </div>
+        </div>
+
+        <!-- Página Agradecimentos -->
+        <div class="page" id="thanks">
+            <div class="fireworks" id="fireworks"></div>
+            <div class="thanks-content">
+                <h1>🎉 Obrigado!</h1>
+                <p style="font-size: 1.3em; color: #718096; margin-bottom: 30px;">
+                    Apresentação dos insights coletados na viagem ao Rio de Janeiro
+                </p>
+                
+                <div class="contact-info">
+                    <h3>📧 Contato para Dúvidas</h3>
+                    <p>Para esclarecimentos adicionais sobre os insights apresentados:</p>
+                    <a href="mailto:dea@grupointegrado.br" class="email-link">                    <a href="mailto:dea@grupointegrado.br" class="email-link">dea@grupointegrado.br</a>
+                </div>
+                
+                <div style="margin-top: 40px;">
+                    <p style="color: #a0aec0; font-style: italic;">
+                        "A inovação distingue entre um líder e um seguidor." - Steve Jobs
+                    </p>
+                </div>
+            </div>
+            
+            <div class="navigation">
+                <button class="btn btn-secondary" onclick="showPage('index')">← Voltar ao Índice</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Função principal para mostrar páginas
+        function showPage(pageId) {
+            console.log('Navegando para:', pageId); // Debug
+            
+            // Esconder todas as páginas
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Mostrar a página selecionada
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                updateProgress(pageId);
+                window.scrollTo(0, 0);
+                
+                // Se for a página de agradecimentos, iniciar fogos
+                if (pageId === 'thanks') {
+                    startFireworks();
+                } else {
+                    stopFireworks();
+                }
+            } else {
+                console.error('Página não encontrada:', pageId);
+            }
+        }
+
+        // Função para atualizar barra de progresso
+        function updateProgress(currentPageId) {
+            const pages = ['index', 'unig', 'uva', 'afya', 'comparison', 'thanks'];
+            const currentIndex = pages.indexOf(currentPageId);
+            const progress = (currentIndex / (pages.length - 1)) * 100;
+            
+            const progressFill = document.getElementById('progressFill');
+            if (progressFill) {
+                progressFill.style.width = progress + '%';
+            }
+        }
+
+        // Função para iniciar fogos de artifício
+        function startFireworks() {
+            const fireworksContainer = document.getElementById('fireworks');
+            if (!fireworksContainer) return;
+            
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#dda0dd', '#98d8c8'];
+            
+            function createFirework() {
+                const firework = document.createElement('div');
+                firework.className = 'firework';
+                firework.style.left = Math.random() * 100 + '%';
+                firework.style.top = Math.random() * 100 + '%';
+                firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                firework.style.animationDelay = Math.random() * 2 + 's';
+                
+                fireworksContainer.appendChild(firework);
+                
+                // Remover após animação
+                setTimeout(() => {
+                    if (firework.parentNode) {
+                        firework.parentNode.removeChild(firework);
+                    }
+                }, 3000);
+            }
+            
+            // Parar fogos anteriores se existirem
+            stopFireworks();
+            
+            // Criar fogos a cada 500ms
+            window.fireworksInterval = setInterval(createFirework, 500);
+            
+            // Criar alguns fogos imediatamente
+            for (let i = 0; i < 5; i++) {
+                setTimeout(createFirework, i * 100);
+            }
+        }
+
+        // Função para parar fogos de artifício
+        function stopFireworks() {
+            if (window.fireworksInterval) {
+                clearInterval(window.fireworksInterval);
+                window.fireworksInterval = null;
+            }
+            const fireworksContainer = document.getElementById('fireworks');
+            if (fireworksContainer) {
+                fireworksContainer.innerHTML = '';
+            }
+        }
+
+        // Navegação por teclado
+        document.addEventListener('keydown', function(e) {
+            const currentPage = document.querySelector('.page.active');
+            if (!currentPage) return;
+            
+            const currentPageId = currentPage.id;
+            const pages = ['index', 'unig', 'uva', 'afya', 'comparison', 'thanks'];
+            const currentIndex = pages.indexOf(currentPageId);
+            
+            if (e.key === 'ArrowRight' && currentIndex < pages.length - 1) {
+                showPage(pages[currentIndex + 1]);
+            } else if (e.key === 'ArrowLeft' && currentIndex > 0) {
+                showPage(pages[currentIndex - 1]);
+            } else if (e.key === 'Home') {
+                showPage('index');
+            }
+        });
+
+        // Adicionar efeitos hover nos cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.index-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.02)';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+            
+            // Inicializar progresso
+            updateProgress('index');
+        });
+
+        // Função para impressão
+        function printPresentation() {
+            // Mostrar todas as páginas para impressão
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.style.display = 'block';
+                page.style.pageBreakAfter = 'always';
+            });
+            
+            window.print();
+            
+            // Restaurar visualização normal após impressão
+            setTimeout(() => {
+                pages.forEach(page => {
+                    page.style.display = 'none';
+                    page.style.pageBreakAfter = 'auto';
+                });
+                document.querySelector('.page.active').style.display = 'block';
+            }, 1000);
+        }
+
+        // Adicionar botão de impressão
+        const printButton = document.createElement('button');
+        printButton.innerHTML = '🖨️';
+        printButton.className = 'btn';
+        printButton.title = 'Imprimir Apresentação';
+        printButton.style.position = 'fixed';
+        printButton.style.bottom = '20px';
+        printButton.style.right = '20px';
+        printButton.style.zIndex = '1000';
+        printButton.style.width = '50px';
+        printButton.style.height = '50px';
+        printButton.style.borderRadius = '50%';
+        printButton.style.fontSize = '1.2em';
+        printButton.onclick = printPresentation;
+        document.body.appendChild(printButton);
+
+        // CSS adicional para impressão
+        const printStyle = document.createElement('style');
+        printStyle.textContent = `
+            @media print {
+                .navigation, .progress-bar, button {
+                    display: none !important;
+                }
+                .page {
+                    display: block !important;
+                    page-break-after: always;
+                    box-shadow: none;
+                    margin: 0;
+                    padding: 20px;
+                    background: white !important;
+                }
+                .page:last-child {
+                    page-break-after: avoid;
+                }
+                body {
+                    background: white !important;
+                }
+                .fireworks {
+                    display: none !important;
+                }
+                .comparison-table {
+                    font-size: 0.8em;
+                }
+                h1 {
+                    font-size: 1.8em;
+                }
+                h2 {
+                    font-size: 1.4em;
+                }
+            }
+            
+            @media screen and (max-width: 768px) {
+                .comparison-table {
+                    font-size: 0.8em;
+                    overflow-x: auto;
+                    display: block;
+                    white-space: nowrap;
+                }
+                .comparison-table td, .comparison-table th {
+                    padding: 8px;
+                }
+            }
+        `;
+        document.head.appendChild(printStyle);
+
+        // Adicionar indicador visual de carregamento
+        function addLoadingIndicator() {
+            const loading = document.createElement('div');
+            loading.innerHTML = '⏳ Carregando...';
+            loading.style.position = 'fixed';
+            loading.style.top = '50%';
+            loading.style.left = '50%';
+            loading.style.transform = 'translate(-50%, -50%)';
+            loading.style.background = 'rgba(0,0,0,0.8)';
+            loading.style.color = 'white';
+            loading.style.padding = '20px';
+            loading.style.borderRadius = '10px';
+            loading.style.zIndex = '9999';
+            loading.style.display = 'none';
+            loading.id = 'loadingIndicator';
+            document.body.appendChild(loading);
+        }
+
+        // Inicializar quando a página carregar
+        window.addEventListener('load', function() {
+            addLoadingIndicator();
+            console.log('Apresentação carregada com sucesso!');
+        });
+
+        // Adicionar suporte para gestos em dispositivos móveis
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleGesture();
+        });
+
+        function handleGesture() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                const currentPage = document.querySelector('.page.active');
+                if (!currentPage) return;
+                
+                const currentPageId = currentPage.id;
+                const pages = ['index', 'unig', 'uva', 'afya', 'comparison', 'thanks'];
+                const currentIndex = pages.indexOf(currentPageId);
+                
+                if (diff > 0 && currentIndex < pages.length - 1) {
+                    // Swipe left - próxima página
+                    showPage(pages[currentIndex + 1]);
+                } else if (diff < 0 && currentIndex > 0) {
+                    // Swipe right - página anterior
+                    showPage(pages[currentIndex - 1]);
+                }
+            }
+        }
+
+        // Debug: Verificar se todas as funções estão funcionando
+        console.log('Script carregado. Funções disponíveis:', {
+            showPage: typeof showPage,
+            updateProgress: typeof updateProgress,
+            startFireworks: typeof startFireworks,
+            stopFireworks: typeof stopFireworks
+        });
+    </script>
+</body>
+</html>
